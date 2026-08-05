@@ -1,0 +1,18 @@
+{
+  "bootstrap_date": "20260804",
+  "kind": "marketing",
+  "organization": "embedded-alerts",
+  "repository": "embedded-alerts.github.io",
+  "required_paths": [
+    ".github/workflows/ci.yml",
+    ".gitignore",
+    "astro.config.mjs",
+    "package.json",
+    "public/robots.txt",
+    "scripts/verify_repo.py",
+    "src/pages/index.astro"
+  ],
+  "schema_version": 1,
+  "tracking_issue": "DEN-1949",
+  "visibility": "public"
+}
