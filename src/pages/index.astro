@@ -1,4 +1,69 @@
 ---
-const title = "Embedded Alerts";
+import '../styles/global.css';
 ---
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/><title>{title}</title></head><body><main><p>Public foundation</p><h1>{title}</h1><p>Marketing, documentation, privacy, support, and public integration guidance for Embedded Alerts.</p></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A low-latency alert pipeline for constrained devices: ingest small signals, enrich context, route incidents, and prove uptime." />
+    <meta property="og:title" content="Embedded Alerts" />
+    <meta property="og:description" content="Edge-native alerting for devices, firmware fleets, field sensors, and embedded teams." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#ef4444" />
+    <link rel="icon" href="/favicon.svg" />
+    <title>Embedded Alerts — Edge-native alerting for devices, firmware fleets, field sensors, and embedded teams.</title>
+  </head>
+  <body style="--accent: #ef4444; --accent-2: #38bdf8;">
+    <main class="page-shell">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="#top" aria-label="Embedded Alerts"><span class="brand-mark"></span><span>Embedded Alerts</span></a>
+        <div class="nav-links"><a href="#platform">Platform</a><a href="#workflow">Workflow</a><a href="#integrations">Integrations</a><a href="#launch" class="nav-cta">Launch</a></div>
+      </nav>
+      <section id="top" class="hero section-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">embedded-alerts · operator-grade software</p>
+          <h1>Edge-native alerting for devices, firmware fleets, field sensors, and embedded teams.</h1>
+          <p class="hero-text">A low-latency alert pipeline for constrained devices: ingest small signals, enrich context, route incidents, and prove uptime.</p>
+          <div class="hero-actions"><a class="button primary" href="mailto:hello@embedded-alerts.com?subject=Connect%20a%20device%20fleet">Connect a device fleet</a><a class="button secondary" href="#platform">Review alert routes</a></div>
+          <div class="trust-row" aria-label="Proof points"><span>Designed for constrained devices</span>
+<span>Observability-first alert context</span>
+<span>Field-team friendly incident trails</span></div>
+        </div>
+        <aside class="hero-panel" aria-label="Product snapshot">
+          <div class="pulse-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="stat-card"><strong>ms-scale</strong><span>edge alert path</span></div>
+          <div class="signal-list"><p>Designed for</p><h2>embedded engineers, IoT operators, hardware startups, safety systems, vehicle telemetry teams, and industrial monitoring groups</h2></div>
+        </aside>
+      </section>
+      <section id="platform" class="platform">
+        <div class="section-heading"><p class="eyebrow">Platform</p><h2>Everything needed to move from idea to reliable operation.</h2><p>Each module is designed to stand alone, but the real value shows up when intake, automation, routing, and analytics share one source of truth.</p></div>
+        <div class="feature-grid"><article class="feature-card"><span class="feature-dot"></span><h3>Tiny payload ingest</h3><p>Accept compact heartbeats, fault codes, sensor thresholds, brownouts, and firmware state changes from constrained devices.</p></article>
+<article class="feature-card"><span class="feature-dot"></span><h3>Incident enrichment</h3><p>Attach device metadata, firmware versions, geography, runbooks, severity, and escalation policies at the edge.</p></article>
+<article class="feature-card"><span class="feature-dot"></span><h3>Durable alert routing</h3><p>Route to Slack, SMS, email, PagerDuty-style webhooks, and downstream stores without losing the original signal.</p></article>
+<article class="feature-card"><span class="feature-dot"></span><h3>Fleet confidence</h3><p>Surface uptime, missed heartbeats, noisy sensors, false positives, and release-risk cohorts for every device generation.</p></article></div>
+      </section>
+      <section id="workflow" class="workflow section-grid">
+        <div><p class="eyebrow">Workflow</p><h2>A clean operating loop for customers and internal teams.</h2><p>Start with a simple request, turn it into a durable system of record, then keep every person and integration in sync.</p></div>
+        <ol class="steps"><li><span>01</span><strong>Register the fleet</strong></li>
+<li><span>02</span><strong>Ingest compact telemetry</strong></li>
+<li><span>03</span><strong>Classify severity</strong></li>
+<li><span>04</span><strong>Route responders</strong></li>
+<li><span>05</span><strong>Close the incident with evidence</strong></li></ol>
+      </section>
+      <section id="integrations" class="integrations"><div class="section-heading compact"><p class="eyebrow">Integrations</p><h2>Connect the systems that already run the business.</h2></div><div class="integration-marquee"><span>MQTT bridges</span>
+<span>Cloudflare Queues</span>
+<span>Slack</span>
+<span>Prometheus remote write</span>
+<span>Grafana/Loki</span>
+<span>Webhook sinks</span></div></section>
+      <section class="architecture">
+        <div class="arch-card large"><p class="eyebrow">Architecture</p><h2>Astro front-end, edge Worker APIs, and typed client contracts.</h2><p>The repo family is split so marketing can ship independently while clients, libraries, monorepo services, and Cloudflare infrastructure evolve through reviewable pull requests.</p></div>
+        <div class="arch-card"><strong>Astro</strong><span>Static, fast, GitHub Pages-ready.</span></div>
+        <div class="arch-card"><strong>Workers</strong><span>Edge intake, webhooks, alerts, and health probes.</span></div>
+        <div class="arch-card"><strong>SDKs</strong><span>Fetch-first clients with generated language targets.</span></div>
+      </section>
+      <section id="launch" class="launch"><p class="eyebrow">Launch path</p><h2>Ready to turn the org into a real product surface.</h2><p>Push the generated repo family, open the bootstrap PRs, connect Cloudflare secrets, then enable GitHub Pages for this Astro site.</p><a class="button primary" href="mailto:hello@embedded-alerts.com?subject=Launch%20Embedded%20Alerts">Open the launch checklist</a></section>
+    </main>
+  </body>
+</html>
