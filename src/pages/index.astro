@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import VentureNetwork from '../components/VentureNetwork.astro';
 const year = new Date().getFullYear();
 ---
 <!doctype html>
@@ -40,7 +41,7 @@ const year = new Date().getFullYear();
     <main id="content" class="page-shell">
       <nav class="nav" aria-label="Primary">
         <a class="brand" href="#top" aria-label="Embedded Alerts home"><span class="brand-mark" aria-hidden="true"></span><span>Embedded Alerts</span></a>
-        <div class="nav-links"><a href="#platform">Platform</a><a href="#workflow">Workflow</a><a href="#principles">Principles</a><a href="#contact" class="nav-cta">Early access</a></div>
+        <div class="nav-links"><a href="#platform">Platform</a><a href="#workflow">Workflow</a><a href="#principles">Principles</a><a href="#network">Network</a><a href="#contact" class="nav-cta">Early access</a></div>
       </nav>
       <section id="top" class="hero section-grid">
         <div class="hero-copy">
@@ -83,6 +84,7 @@ const year = new Date().getFullYear();
         <div class="arch-card"><strong>Failure is expected</strong><span>Queueing, retries, deduplication, and acknowledgement state are treated as core workflow—not edge cases.</span></div>
         <div class="arch-card"><strong>Operators keep control</strong><span>Severity and routing policies remain inspectable, testable, and adjustable by the teams responsible for the fleet.</span></div>
       </section>
+      <VentureNetwork current="embedded-alerts" />
       <section id="contact" class="launch">
         <p class="eyebrow">Early access</p><h2>Bring one real fleet problem.</h2><p>Tell us the device class, transport, fleet size, signal shape, and current escalation path. Pilot feedback will guide protocol and integration priorities.</p>
         <div class="hero-actions" style="justify-content:center;"><a class="button primary" href="mailto:hello@embedded-alerts.com?subject=Embedded%20Alerts%20pilot%20fleet">Connect a pilot fleet</a><a class="button secondary" href="https://github.com/embedded-alerts" rel="me">Explore the GitHub organization</a></div>

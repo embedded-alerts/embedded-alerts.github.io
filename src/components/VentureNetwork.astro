@@ -1,0 +1,89 @@
+---
+interface Props {
+  current: string;
+}
+
+const { current } = Astro.props;
+const ventures = [
+  { slug: 'apostille-me', name: 'Apostille Me', href: 'https://apostille-me.github.io/', kind: 'Live marketing site', description: 'Cross-border document legalization, translations, routing, and filing evidence.', accent: '#7c3aed' },
+  { slug: 'hacker-house-medellin', name: 'Hacker House Medellín', href: 'https://hacker-house-medellin.github.io/', kind: 'Live marketing site', description: 'Technical coliving, coworking, community programming, and build-week operations.', accent: '#14b8a6' },
+  { slug: 'embedded-alerts', name: 'Embedded Alerts', href: 'https://embedded-alerts.github.io/', kind: 'Live marketing site', description: 'Edge-native alerting and incident context for devices, firmware, and sensor fleets.', accent: '#ef4444' },
+  { slug: 'evento-globolo', name: 'Evento Globolo', href: 'https://evento-globolo.github.io/', kind: 'Live marketing site', description: 'Event publishing, promotion, ticketing, partner operations, and channel analytics.', accent: '#f97316' },
+  { slug: 'agent-pontifex', name: 'Agent Pontifex', href: 'https://github.com/agent-pontifex', kind: 'Engineering organization', description: 'Rust bridges, coordinators, and SDKs for supervising multi-agent systems.', accent: '#a78bfa' },
+  { slug: 'gha-indie-worker', name: 'GHA Indie Worker', href: 'https://github.com/gha-indie-worker', kind: 'Engineering organization', description: 'Self-hosted GitHub Actions execution and workflow infrastructure in Rust.', accent: '#38bdf8' },
+];
+---
+
+<section id="network" class="venture-network" aria-labelledby="venture-network-title">
+  <div class="section-heading">
+    <p class="eyebrow">New venture network</p>
+    <h2 id="venture-network-title">Explore the six youngest active organizations.</h2>
+    <p>Four launch-ready product sites and two engineering organizations, connected so visitors can discover the broader build network without hunting through GitHub.</p>
+  </div>
+  <div class="venture-grid">
+    {ventures.map((venture, index) => (
+      <a
+        class:list={['venture-card', { current: venture.slug === current }]}
+        href={venture.href}
+        aria-current={venture.slug === current ? 'page' : undefined}
+        style={`--venture-accent:${venture.accent}`}
+      >
+        <div class="venture-card-top">
+          <span class="venture-index">{String(index + 1).padStart(2, '0')}</span>
+          <span class="venture-status">{venture.slug === current ? 'Current site' : venture.kind}</span>
+        </div>
+        <h3>{venture.name}</h3>
+        <p>{venture.description}</p>
+        <span class="venture-link">
+          {venture.slug === current ? 'You are here' : 'Visit venture'}
+          <span aria-hidden="true">↗</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .venture-network { padding: 90px 0; border-top: 1px solid rgba(255,255,255,.08); }
+  .venture-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .venture-card {
+    position: relative;
+    display: flex;
+    min-height: 286px;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,.11);
+    border-radius: 30px;
+    background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
+    box-shadow: inset 0 1px rgba(255,255,255,.08);
+    transition: transform .22s ease, border-color .22s ease, background .22s ease;
+  }
+  .venture-card::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -60px;
+    width: 150px;
+    height: 150px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--venture-accent) 38%, transparent);
+    filter: blur(26px);
+    opacity: .78;
+  }
+  .venture-card:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--venture-accent) 55%, rgba(255,255,255,.2));
+    background: rgba(255,255,255,.10);
+  }
+  .venture-card.current { border-color: color-mix(in srgb, var(--accent-2) 54%, white); }
+  .venture-card-top { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 44px; }
+  .venture-index { color: var(--venture-accent); font-weight: 900; font-variant-numeric: tabular-nums; }
+  .venture-status { max-width: 160px; color: rgba(226,232,240,.58); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-align: right; text-transform: uppercase; }
+  h3 { position: relative; font-size: 30px; line-height: 1; }
+  .venture-card > p { position: relative; flex: 1; }
+  .venture-link { position: relative; display: inline-flex; align-items: center; gap: 8px; color: white; font-size: 14px; font-weight: 900; }
+  @media (max-width: 900px) { .venture-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .venture-grid { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .venture-card { transition: none; } .venture-card:hover { transform: none; } }
+</style>
