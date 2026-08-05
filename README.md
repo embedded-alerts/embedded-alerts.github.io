@@ -1,9 +1,22 @@
 # embedded-alerts.github.io
 
-Marketing, documentation, privacy, support, and public integration guidance for Embedded Alerts.
+Astro marketing site for **Embedded Alerts**.
 
-Initialized through `DEN-1949` as a testable `marketing` foundation. Product behavior continues through focused pull requests.
+- Built with Astro, not Jekyll.
+- Uses GitHub Pages Actions deployment.
+- Includes a responsive landing page, SEO metadata, favicon, proof points, workflow, integrations, architecture, and launch CTA.
+- `public/.nojekyll` is present only to bypass Jekyll processing on Pages; there is no Jekyll site or `_config.yml`.
+- Repository contract metadata lives in `project.json`, `docs/architecture.md`, and `AGENTS.md`.
+
+## Commands
 
 ```bash
+npm install
+npm test
+npm run build
 python3 scripts/verify_repo.py
 ```
+
+## Repository family
+
+The site links the public product narrative to `eal-clients`, `eal-libs`, `eal-monorepo`, and `eal-infra`. GitHub Pages deployment is handled by Actions; Jekyll is not used.
