@@ -1,16 +1,31 @@
 name: CI
+
 on:
   pull_request:
   push:
     branches: [main]
+
 permissions:
   contents: read
+
 jobs:
-  contracts:
-    runs-on: ubuntu-latest
+  test-and-build:
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Check out without persisted credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - run: python3 scripts/verify_repo.py
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+      - name: Validate repository contract
+        run: python3 scripts/verify_repo.py
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run site tests
+        run: npm test
+      - name: Build Astro site
+        run: npm run build
