@@ -1,12 +1,230 @@
 ---
-import document from '../../index.html?raw';
+import VentureNetwork from '../components/VentureNetwork.astro';
+import '../styles/global.css';
 
-const head = document.match(/<head[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? '';
-const body = document.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? '';
+const capabilities = [
+  {
+    title: 'Bounded discovery',
+    body: 'Watch explicit domains, feeds, sitemaps, and public sources instead of pretending the entire web is one trustworthy stream.',
+  },
+  {
+    title: 'Semantic evidence',
+    body: 'Keep headings, proper nouns, phrases, and full passages so every match carries inspectable context rather than an opaque score.',
+  },
+  {
+    title: 'Stateful deduplication',
+    body: 'Collapse mirrors, updates, and near-identical pages before delivery while retaining the provenance needed to explain what changed.',
+  },
+  {
+    title: 'Embedded delivery',
+    body: 'Send structured events to webhooks, product feeds, Slack, or downstream workflows instead of trapping alerts in an email inbox.',
+  },
+];
+
+const workflow = [
+  ['01', 'Register intent', 'Describe the outcome, change, or topic worth monitoring in ordinary language.'],
+  ['02', 'Scope sources', 'Choose the domains and feeds that are authorized, relevant, and worth indexing.'],
+  ['03', 'Extract evidence', 'Normalize metadata and preserve the passages that make each page meaningful.'],
+  ['04', 'Score and explain', 'Compare new evidence with the intent and retain the strongest supporting passages.'],
+  ['05', 'Deliver once', 'Apply thresholds and deduplication, then emit one structured event with provenance.'],
+];
+
+const integrations = [
+  'Webhooks',
+  'Slack',
+  'RSS and Atom',
+  'Sitemaps',
+  'PostgreSQL',
+  'pgvector',
+  'OpenTelemetry',
+  'Rust SDK',
+  'TypeScript SDK',
+  'Dart SDK',
+  'MCP workflows',
+];
 ---
 
 <!doctype html>
-<html lang="en">
-  <head set:html={head}></head>
-  <body set:html={body}></body>
+<html lang="en" style="--accent:#f97316;--accent-2:#22d3ee">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Domain-scoped semantic monitoring that matches human intent against newly published public pages and streams." />
+    <meta name="theme-color" content="#060711" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href="https://embedded-alerts.github.io/" />
+    <meta property="og:title" content="Embedded Alerts — Watch meaning move" />
+    <meta property="og:description" content="Domain-scoped semantic monitoring with inspectable evidence, explicit thresholds, and structured delivery." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://embedded-alerts.github.io/" />
+    <meta name="twitter:card" content="summary" />
+    <title>Embedded Alerts — Watch meaning move</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <div class="page-shell">
+      <header class="nav">
+        <a class="brand" href="#top" aria-label="Embedded Alerts home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Embedded Alerts</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#platform">Platform</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#integrations">Integrations</a>
+          <a href="#network">Network</a>
+          <a class="nav-cta" href="https://github.com/embedded-alerts">View source ↗</a>
+        </nav>
+      </header>
+
+      <main id="content">
+        <section id="top" class="hero section-grid" aria-labelledby="hero-title">
+          <div>
+            <p class="eyebrow">Semantic monitoring / explicit source policy</p>
+            <h1 id="hero-title">Watch meaning move.</h1>
+            <p class="hero-text">
+              Embedded Alerts compares human intent with newly published pages, preserves the passages that explain each match, and routes one structured event into the workflow where it belongs.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="https://github.com/embedded-alerts/eal-api">Inspect the API</a>
+              <a class="button secondary" href="#workflow">See the matching pipeline</a>
+            </div>
+            <div class="trust-row" aria-label="Platform characteristics">
+              <span>Domain scoped</span>
+              <span>Evidence preserving</span>
+              <span>Threshold controlled</span>
+              <span>API first</span>
+            </div>
+          </div>
+
+          <aside class="hero-panel" aria-label="Illustrative semantic alert">
+            <div class="pulse-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="stat-card">
+              <p class="eyebrow">Live match / intent 0042</p>
+              <strong>.92</strong>
+              <span>semantic confidence</span>
+            </div>
+            <div class="signal-list">
+              <p class="eyebrow">Matched evidence</p>
+              <h2>Document rules changed without repeating the registered keywords.</h2>
+              <p>Three passages retained · source policy verified · duplicate family collapsed</p>
+            </div>
+          </aside>
+        </section>
+
+        <section id="platform" class="platform" aria-labelledby="platform-title">
+          <div class="section-heading">
+            <p class="eyebrow">Platform</p>
+            <h2 id="platform-title">An alert is a decision backed by evidence.</h2>
+            <p>
+              Keyword monitors hand relevance work to the recipient after delivery. Embedded Alerts makes source boundaries, evidence, scoring, thresholds, and deduplication part of the pipeline itself.
+            </p>
+          </div>
+          <div class="feature-grid">
+            {capabilities.map((capability) => (
+              <article class="feature-card">
+                <span class="feature-dot" aria-hidden="true"></span>
+                <h3>{capability.title}</h3>
+                <p>{capability.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="workflow" class="workflow section-grid" aria-labelledby="workflow-title">
+          <div class="section-heading compact">
+            <p class="eyebrow">Workflow</p>
+            <h2 id="workflow-title">From human intent to one actionable event.</h2>
+            <p>
+              The matching path stays explicit so operators can tune relevance without hiding behind a black-box feed.
+            </p>
+          </div>
+          <ol class="steps">
+            {workflow.map(([number, title, body]) => (
+              <li>
+                <span>{number}</span>
+                <div><strong>{title}</strong><p>{body}</p></div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section id="integrations" class="integrations" aria-labelledby="integrations-title">
+          <div class="section-heading">
+            <p class="eyebrow">Integrations</p>
+            <h2 id="integrations-title">The result travels as data.</h2>
+            <p>
+              Ingestion, storage, observability, SDKs, and delivery channels remain composable rather than fused into a single inbox.
+            </p>
+          </div>
+          <div class="integration-marquee" aria-label="Supported integration surfaces">
+            {integrations.map((integration) => <span>{integration}</span>)}
+          </div>
+        </section>
+
+        <section class="architecture" aria-label="System architecture">
+          <article class="arch-card large">
+            <p class="eyebrow">Core</p>
+            <strong>Rust ingestion and matching</strong>
+            <span>Concurrent discovery, extraction, policy evaluation, vector search, deduplication, and durable event dispatch.</span>
+          </article>
+          <article class="arch-card"><strong>PostgreSQL</strong><span>Intent, source, page, passage, match, and delivery state.</span></article>
+          <article class="arch-card"><strong>Vectors</strong><span>Page- and passage-level similarity with explainable evidence.</span></article>
+          <article class="arch-card"><strong>Webhooks</strong><span>Signed, retryable events for application and team workflows.</span></article>
+          <article class="arch-card"><strong>HTMX UI</strong><span>Human review, source policy, thresholds, and delivery history.</span></article>
+          <article class="arch-card"><strong>SDKs</strong><span>Typed clients for services, browsers, mobile apps, and automation.</span></article>
+          <article class="arch-card"><strong>OTEL</strong><span>Trace ingestion, matching, suppression, and delivery decisions.</span></article>
+        </section>
+
+        <VentureNetwork current="embedded-alerts" />
+
+        <section class="launch" aria-labelledby="launch-title">
+          <p class="eyebrow">Open infrastructure</p>
+          <h2 id="launch-title">Monitor deliberately. Explain every match.</h2>
+          <p>
+            Follow the implementation across the Embedded Alerts organization, or start with the Rust API and contract repositories.
+          </p>
+          <div class="hero-actions centered-actions">
+            <a class="button primary" href="https://github.com/embedded-alerts">Explore the organization</a>
+            <a class="button secondary" href="https://github.com/embedded-alerts/embedded-alerts.github.io">View this Astro site</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <span>Embedded Alerts</span>
+        <span>Rust · Axum · PostgreSQL · vectors · Astro</span>
+      </footer>
+    </div>
+  </body>
 </html>
+
+<style>
+  .skip-link {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    transform: translateY(-160%);
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: white;
+    color: #05070d;
+    font-weight: 900;
+  }
+  .skip-link:focus { transform: translateY(0); }
+  .steps p { margin: 4px 0 0; }
+  .centered-actions { justify-content: center; }
+  .site-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 32px 4px 0;
+    color: rgba(226, 232, 240, .55);
+    font-size: 13px;
+  }
+  @media (max-width: 640px) {
+    .site-footer { flex-direction: column; }
+  }
+</style>
