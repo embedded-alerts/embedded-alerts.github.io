@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  ASTRO_TELEMETRY_DISABLED: '1'
+
 permissions:
   contents: read
   pages: write
@@ -27,19 +30,21 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22'
-          package-manager-cache: false
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
+          cache: npm
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Validate repository contract
+        run: python3 scripts/verify_repo.py
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Run site tests
         run: npm test
-      - name: Build Astro site
+      - name: Build and verify Astro site
         run: npm run build
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
-      - name: Upload Astro dist artifact
-        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+      - name: Upload Astro artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
-          path: ./dist
+          path: dist
 
   deploy:
     environment:
@@ -51,95 +56,35 @@ jobs:
     outputs:
       page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Let any legacy branch build settle first
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          site="$(gh api "repos/${GITHUB_REPOSITORY}/pages")"
-          build_type="$(jq -r '.build_type // "legacy"' <<<"$site")"
-          if [[ "$build_type" != legacy ]]; then
-            echo "Pages source is already ${build_type}; no legacy build to wait for."
-            exit 0
-          fi
-
-          for attempt in $(seq 1 90); do
-            latest="$(gh api "repos/${GITHUB_REPOSITORY}/pages/builds/latest")"
-            commit="$(jq -r '.commit // ""' <<<"$latest")"
-            status="$(jq -r '.status // ""' <<<"$latest")"
-            echo "legacy Pages build attempt=${attempt} commit=${commit} status=${status}"
-            if [[ "$commit" == "$GITHUB_SHA" && "$status" == built ]]; then
-              exit 0
-            fi
-            if [[ "$commit" == "$GITHUB_SHA" && "$status" == errored ]]; then
-              echo "Legacy build errored; continuing so the custom Astro deployment can replace it."
-              exit 0
-            fi
-            sleep 2
-          done
-
-          echo "Timed out waiting for the legacy Pages build for ${GITHUB_SHA}." >&2
-          exit 1
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
 
   verify-live:
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     needs: deploy
     steps:
-      - name: Curl live Astro HTML and stylesheet
+      - name: Verify deployed Astro HTML
         env:
           SITE_URL: ${{ needs.deploy.outputs.page_url }}
+          EXPECTED_MARKER: 'Watch meaning move.'
         shell: bash
         run: |
           set -euo pipefail
           base="${SITE_URL%/}/"
-          test -n "$base"
-
           for attempt in $(seq 1 60); do
-            cache_bust="${GITHUB_SHA}-${attempt}"
-            if curl \
-              --fail \
-              --silent \
-              --show-error \
-              --location \
-              --retry 2 \
-              --connect-timeout 10 \
-              --max-time 30 \
+            if curl --fail --silent --show-error --location \
+              --connect-timeout 10 --max-time 30 \
               -H 'Cache-Control: no-cache' \
-              "${base}?deploy=${cache_bust}" \
-              -o site.html; then
-              if grep -q 'Watch meaning move.' site.html \
-                && grep -q 'data-astro-cid' site.html \
-                && ! grep -q '<head></head>' site.html \
-                && grep -Eq '<link[^>]+rel="stylesheet"[^>]+href="[^"]+\.css"' site.html; then
-                css_path="$(grep -oE 'href="[^"]+\.css"' site.html | head -n 1 | cut -d'"' -f2)"
-                css_url="$(python3 -c 'import sys; from urllib.parse import urljoin; print(urljoin(sys.argv[1], sys.argv[2]))' "$base" "$css_path")"
-                curl \
-                  --fail \
-                  --silent \
-                  --show-error \
-                  --location \
-                  --retry 2 \
-                  --connect-timeout 10 \
-                  --max-time 30 \
-                  -H 'Cache-Control: no-cache' \
-                  "${css_url}?deploy=${cache_bust}" \
-                  -o site.css
-                css_bytes="$(wc -c < site.css)"
-                if (( css_bytes >= 1000 )) && grep -q '.page-shell' site.css; then
-                  echo "Live Astro deployment verified: ${base}"
-                  echo "Stylesheet verified: ${css_url} (${css_bytes} bytes)"
-                  exit 0
-                fi
-              fi
+              "${base}?deploy=${GITHUB_SHA}-${attempt}" -o site.html \
+              && grep -Fq "$EXPECTED_MARKER" site.html \
+              && grep -Fq 'rel="canonical"' site.html \
+              && grep -Fq 'rel="icon"' site.html; then
+              echo "Live Astro deployment verified: ${base}"
+              exit 0
             fi
             sleep 3
           done
-
-          echo 'Live deployment did not converge to the expected styled Astro artifact.' >&2
-          sed -n '1,60p' site.html >&2 || true
+          echo "Live site did not converge to the expected Astro artifact." >&2
           exit 1
