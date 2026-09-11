@@ -7,7 +7,12 @@ required = ["README.md", "AGENTS.md", "project.json", "docs/architecture.md", *m
 missing = [path for path in required if not (root / path).exists()]
 if missing: raise SystemExit(f"missing required paths: {missing}")
 for path in root.rglob("*"):
-    if not path.is_file() or ".git" in path.parts or path.stat().st_size > 1_000_000: continue
+    if (
+        not path.is_file()
+        or any(part in {".git", "node_modules", "dist", ".astro"} for part in path.parts)
+        or path.stat().st_size > 1_000_000
+    ):
+        continue
     try: text = path.read_text()
     except UnicodeDecodeError: continue
     if any(marker in text for marker in ("<"*7, "="*7, ">"*7)): raise SystemExit(f"conflict marker in {path}")

@@ -5,8 +5,15 @@ on:
   push:
     branches: [main]
 
+env:
+  ASTRO_TELEMETRY_DISABLED: '1'
+
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test-and-build:
@@ -21,12 +28,12 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '22'
-          package-manager-cache: false
+          cache: npm
       - name: Validate repository contract
         run: python3 scripts/verify_repo.py
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Run site tests
         run: npm test
-      - name: Build Astro site
+      - name: Build and verify Astro site
         run: npm run build

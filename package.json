@@ -6,7 +6,7 @@
   "description": "Astro marketing site for Embedded Alerts.",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/verify-built-site.mjs",
     "preview": "astro preview",
     "test": "node --test tests/*.test.mjs",
     "lint:ores": "if [ -f .ores-lint/lint.sh ]; then sh .ores-lint/lint.sh; else echo 'ores-lint not installed'; fi",
